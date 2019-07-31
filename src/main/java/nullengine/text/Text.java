@@ -182,24 +182,17 @@ public class Text {
 
         int left = 0;
 
-//        System.out.println("1   " + text);
-
         while ((left = indexOfLeft(text)) != -1) {
 
             var name = text.substring(0, left);
 
-//            System.out.println("2   " + name);
-//            System.out.println("3   " + text.substring(left + 1));
             var right = getRight(text.substring(left + 1));
 
             var value = text.substring(left + 1, left + 1 + right);
-//            System.out.println("4   " + value);
 
             list.add(textAttributeManager.deserialize(name, deleteSlash(value)));
 
             text = text.substring(left + right + 2);
-
-//            System.out.println("5   " + text);
 
         }
 
