@@ -1,4 +1,4 @@
-package unknowndomain.text.attribute;
+package nullengine.text.attribute;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

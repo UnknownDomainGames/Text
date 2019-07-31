@@ -1,6 +1,6 @@
-package unknowndomain.text;
+package nullengine.text;
 
-import unknowndomain.text.attribute.TextAttributeManager;
+import nullengine.text.attribute.TextAttributeManager;
 
 import java.util.ArrayList;
 import java.util.List;

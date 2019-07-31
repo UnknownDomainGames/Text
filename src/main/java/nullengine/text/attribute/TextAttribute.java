@@ -1,4 +1,4 @@
-package unknowndomain.text.attribute;
+package nullengine.text.attribute;
 
 public abstract class TextAttribute {
     public abstract String serialize();
