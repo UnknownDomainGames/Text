@@ -2,6 +2,7 @@ package nullengine.text;
 
 import nullengine.text.attribute.TextAttribute;
 import nullengine.text.attribute.TextAttributeManager;
+import nullengine.text.format.symbol.SymbolManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,7 +109,6 @@ public class Text {
         var string = serializeText;
 
         while ((left = indexOfLeft(string)) != -1) {
-
             Text text = Text.as(deleteSlash(string.substring(0, left)));
 
             var lastString = string.substring(left + 1);
@@ -119,7 +119,7 @@ public class Text {
                     .stream()
                     .forEach(textAttribute -> text.setAttribute(textAttribute));
 
-            string = string.substring(right + 1);
+            string = string.substring(left + right + 2);
 
             texts.add(text);
         }
