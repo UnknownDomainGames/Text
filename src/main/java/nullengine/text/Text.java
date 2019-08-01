@@ -99,7 +99,7 @@ public class Text {
         return new Text(string);
     }
 
-    public static Text[] deserialize(String serializeText) {
+    public static Texts deserialize(String serializeText) {
 
         List<Text> texts = new ArrayList<>();
 
@@ -124,7 +124,7 @@ public class Text {
             texts.add(text);
         }
 
-        return texts.toArray(new Text[0]);
+        return Texts.as(texts);
     }
 
     private static String deleteSlash(String text) {

@@ -3,7 +3,6 @@ package nullengine.text;
 import nullengine.text.attribute.TextAttributeManager;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TextBuilder {
 
@@ -25,8 +24,8 @@ public class TextBuilder {
         return this;
     }
 
-    public List<Text> get(){
-        return texts;
+    public Texts get(){
+        return Texts.as(texts);
     }
 
     public static TextBuilder builder(){

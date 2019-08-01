@@ -2,8 +2,11 @@ package main;
 
 import nullengine.text.Text;
 import nullengine.text.TextBuilder;
+import nullengine.text.Texts;
 import nullengine.text.attribute.*;
+import org.junit.Assert;
 
+import java.awt.*;
 import java.util.List;
 
 public class Test {
@@ -27,9 +30,24 @@ public class Test {
 
         text.setAttribute(textAttributeManager.getAttribute("test","alskdhjfg"));
 
-        System.out.println(text.serialize());
 
-        System.out.println(Text.deserialize(text.serialize())[0].serialize());
+        Assert.assertEquals(text.serialize(),Text.deserialize(text.serialize()).get(0).serialize());
+
+        TextBuilder builder = TextBuilder.builder();
+
+        Texts texts = builder.append("abc")
+                .attribute("color",255,123,53)
+                .append("bcs")
+                .attribute("color", Color.BLUE)
+                .attribute("deleteLine")
+                .get();
+
+        String s = texts.serialize();
+
+        Texts texts1 = Text.deserialize(s);
+
+        System.out.println(s);
+        System.out.println(texts1.serialize());
     }
 
     public static class TestAttribute extends TextAttribute {
@@ -49,30 +67,6 @@ public class Test {
         public String serialize() {
             return "{"+text+"}";
         }
-    }
-
-    @org.junit.Test
-    public void builderTest(){
-        TextAttributeManager textAttributeManager = Text.getTextAttributeManager();
-
-        textAttributeManager.putAttribute("color", ColorAttribute.class);
-
-        textAttributeManager.putAttribute("deleteLine", DeleteLineAttribute.class);
-
-        textAttributeManager.putAttribute("bold", BoldAttribute.class);
-
-        List<Text> textList = TextBuilder.builder()
-                .append("耗子女装")
-                .attribute("color",255,255,255)
-                .attribute("bold")
-                .attribute("deleteLine")
-                .append("   女装万岁")
-                .attribute("color",111,111,111)
-                .attribute("bold")
-                .get();
-
-        textList.forEach(text -> System.out.print(text.serialize()));
-        System.out.println();
     }
 
 }
