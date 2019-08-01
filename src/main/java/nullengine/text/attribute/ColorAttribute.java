@@ -36,6 +36,14 @@ public class ColorAttribute extends TextAttribute {
         return blue;
     }
 
+    public int getAlpha(){
+        return alpha;
+    }
+
+    public Color getColor(){
+        return new Color(red,green,blue,alpha);
+    }
+
     @Override
     public String serialize() {
         return red+","+green+","+blue+","+alpha;
