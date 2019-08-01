@@ -46,8 +46,7 @@ public class Test {
 
         Texts texts1 = Text.deserialize(s);
 
-        System.out.println(s);
-        System.out.println(texts1.serialize());
+        Assert.assertEquals(s,texts1.serialize());
     }
 
     public static class TestAttribute extends TextAttribute {
