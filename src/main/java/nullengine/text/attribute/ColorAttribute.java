@@ -14,7 +14,7 @@ public class ColorAttribute extends TextAttribute {
     }
 
     public ColorAttribute(int red, int green, int blue) {
-        this(red,green,blue,0);
+        this(red,green,blue,255);
     }
 
     public ColorAttribute(int red, int green, int blue,int alpha) {
