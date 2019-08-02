@@ -2,6 +2,7 @@ package nullengine.text;
 
 import nullengine.text.attribute.TextAttribute;
 import nullengine.text.attribute.TextAttributeManager;
+import nullengine.text.escape.Escaper;
 import nullengine.text.format.symbol.SymbolManager;
 
 import java.util.ArrayList;
@@ -11,6 +12,12 @@ import java.util.List;
 public class Text {
 
     private static TextAttributeManager textAttributeManager = new TextAttributeManager();
+
+    private static Escaper ESCAPER = Escaper
+            .builder()
+            .addEscape('{')
+            .addEscape('}')
+            .build();
 
     private String text;
 
@@ -50,21 +57,7 @@ public class Text {
     }
 
     public String serialize() {
-        return insertSlash(text) + "{" + serializeAttributes() + "}";
-    }
-
-    private String insertSlash(String text) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (char ch : text.toCharArray()) {
-            switch (ch) {
-                case '{':
-                case '}':
-                    stringBuilder.append('\\');
-                default:
-                    stringBuilder.append(ch);
-            }
-        }
-        return stringBuilder.toString();
+        return ESCAPER.escape(text) + "{" + serializeAttributes() + "}";
     }
 
     private String serializeAttributes() {
@@ -77,7 +70,7 @@ public class Text {
 
             stringBuilder.append(textAttributeManager.getName(attribute.getClass()));
             stringBuilder.append("{");
-            stringBuilder.append(insertSlash(attribute.serialize()));
+            stringBuilder.append(ESCAPER.escape(attribute.serialize()));
             stringBuilder.append("}");
 
         }
@@ -108,8 +101,8 @@ public class Text {
 
         var string = serializeText;
 
-        while ((left = indexOfLeft(string)) != -1) {
-            Text text = Text.as(deleteSlash(string.substring(0, left)));
+        while ((left = ESCAPER.indexOf(string,'{')) != -1) {
+            Text text = Text.as(ESCAPER.unescape(string.substring(0, left)));
 
             var lastString = string.substring(left + 1);
 
@@ -125,34 +118,6 @@ public class Text {
         }
 
         return Texts.as(texts);
-    }
-
-    private static String deleteSlash(String text) {
-        StringBuilder stringBuilder = new StringBuilder();
-        char[] chars = text.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            char ch = chars[i];
-
-            switch (ch) {
-                case '{':
-                case '}':
-                    stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());
-                default:
-                    stringBuilder.append(ch);
-            }
-        }
-        return stringBuilder.toString();
-    }
-
-    private static int indexOfLeft(String text) {
-        char[] chars = text.toCharArray();
-
-        for (int i = 0; i < chars.length; i++) {
-            if (chars[i] == '{' && (i == 0 || chars[i - 1] != '\\')) {
-                return i;
-            }
-        }
-        return -1;
     }
 
     private static int getRight(String text) {
@@ -182,7 +147,7 @@ public class Text {
 
         int left = 0;
 
-        while ((left = indexOfLeft(text)) != -1) {
+        while ((left = ESCAPER.indexOf(text,'{')) != -1) {
 
             var name = text.substring(0, left);
 
@@ -190,7 +155,7 @@ public class Text {
 
             var value = text.substring(left + 1, left + 1 + right);
 
-            list.add(textAttributeManager.deserialize(name, deleteSlash(value)));
+            list.add(textAttributeManager.deserialize(name, ESCAPER.unescape(value)));
 
             text = text.substring(left + right + 2);
 
